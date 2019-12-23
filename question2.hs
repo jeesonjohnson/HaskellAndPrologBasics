@@ -1,5 +1,5 @@
-import Data.List
-import System.IO
+import           Data.List
+import           System.IO
 {-
 Question 2.1.a
 -}
@@ -9,8 +9,8 @@ step (x:y:ys) "*" = x * y:ys
 step (x:y:ys) "+" = x + y:ys
 step (x:y:ys) "-" = y - x:ys
 --Validations for step function
-step (x:ys) _ = x:ys
-step _ word= [read word::Int]
+step (x:ys) _     = x:ys
+step _ word=      [read word::Int]
 
 {-
 Question 2.1.b
@@ -62,18 +62,36 @@ rpnRec = head . customfolder sorter []
     sorter numbers operation
       | operation `elem` ["+","-","*"] = step numbers operation
       | otherwise = read operation:numbers
-    customfolder _ a [] = a
+    customfolder _ a []     = a
     customfolder f a (x:xs) =customfolder f (f a x) xs
 
 
 {-
 Question 2.2 A polish notation Elevator
-Example test ["+", "3", "4"]
+This function operats a similar way to Q2.1.b, however being altered to work with
+folr and its right association property's.
+
+  # In this function a custom step function had to be provided, this being as
+    since the original step function is defined for a foldl function, when it
+    comes to a negative operation, when we did say ["-","3","4"], the foldr
+    function will interperate the values to pass into the step function as [4,3] "-"
+    due to right assosiativity of the foldr function. Therefore resulting in an
+    incorrect answer, as the step function is defined for input to be (for this question)
+    to be [3,4] "-". There a custom guard was provided for the negation function, to
+    account for the right assosiativity of the foldr function.
+    We could have passed in a reversed array to the step function, so instead of [4,3]
+    [3,4] would be passed however this deems incorrect results where say a multiple set
+    of function are required. so say for example ["+","-","4","2","3","4"]. Here if
+    we tried solving with reverse the value passed into the step function from [4,3,2,4]
+    would be [4,2,3,4] "-" resulting in incorrect answers further down, when doing say "+"/
+
 -}
 
-pn :: [String] -> [Int]
-pn userInput= foldr sorter [] userInput
+pn :: [String] -> Int
+pn = head . foldr sorter []
   where
-    sorter testVal arr
-      | testVal `elem` ["+","-","*"] = step arr testVal
-      | otherwise = read testVal:arr
+    sorter testVal numbers
+      | testVal == "-" = customNegativeStep numbers testVal
+      | testVal `elem` ["+","*"] = step numbers testVal
+      | otherwise = read testVal:numbers
+    customNegativeStep (x:y:ys) "-" = x - y:ys --Need due to explanation above

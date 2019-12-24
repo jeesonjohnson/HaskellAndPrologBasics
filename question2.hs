@@ -162,7 +162,8 @@ rpn3 userInput
 rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> Int
 rpn4 func userInput = head (foldl (functionDecider func) [] userInput)
   where
-    functionDecider _ numbers testingVal = originalOperations numbers testingVal -- Think of putting this as gurads instead of pattern matching
+    functionDecider func numbers testingVal = if (not (isNothing (func testingVal))) then (fromJust (func testingVal )) numbers else originalOperations numbers testingVal
+    -- functionDecider _ numbers testingVal = originalOperations numbers testingVal
     originalOperations numbers testingVal
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
@@ -172,7 +173,7 @@ rpn4 func userInput = head (foldl (functionDecider func) [] userInput)
   Question 2.4.b, extensions to Q2.4.a
 -}
 
-exts :: String -> Maybe ([Integer] -> [Integer])
+exts :: String -> Maybe ([Int] -> [Int])
 exts "+" = Just (map (+2))
 exts _  = Nothing
 

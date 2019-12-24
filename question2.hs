@@ -1,18 +1,21 @@
-import           Data.List
-import           System.IO
 import           Data.Maybe
+
 {-
 Question 2.1.a
   This question uses appropraite pattern matching to solve pass in values into
   the function and evaluate the said results.
 -}
 --Step function definition
-step :: [Int]-> String->[Int]--Rememebre to achnagain valurable names!!!!!!
+step :: [Int]-> String->[Int]
 step (x:y:ys) "*" = x * y:ys
 step (x:y:ys) "+" = x + y:ys
 step (x:y:ys) "-" = y - x:ys
 --Validations for step function
 step arr word = arr ++ [read word::Int]
+
+
+-- #########################################################################################
+
 {-
 Question 2.1.b
 
@@ -38,8 +41,6 @@ we pass in head . foldl (sorter) [] ["3","7","+"]
 
 5) 10                      The value 10 is returned as the final answer, using the head
                            fucntion on the array that returns the first element of the array.
-
-
 -}
 
 calcRPN :: [String] -> Int
@@ -49,7 +50,8 @@ calcRPN = head . foldl sorter []
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
 
---WORKING BUT COPPIED FROM WEBSITE https://rosettacode.org/wiki/Parsing/RPN_calculator_algorithm#Haskell
+
+-- #########################################################################################
 
 
 {-
@@ -69,6 +71,9 @@ rpnRec = head . customfolder sorter []
     customfolder _ a []     = a
     customfolder f a (x:xs) =customfolder f (f a x) xs
 
+
+
+-- #########################################################################################
 
 {-
 Question 2.2 A polish notation Elevator
@@ -101,7 +106,7 @@ pn = head . foldr sorter []
     customNegativeStep (x:y:ys) "-" = x - y:ys --Needed due to explanation above
 
 
-
+-- #########################################################################################
 {-
 Question 2.3.a
   Whereas the similar output could be achived by the following
@@ -115,13 +120,11 @@ data RPNOut = Success { answer :: Int}| Stuck {inputNumbers::[Int], currentOpera
               Incomplete {finalNumberArray :: [Int]} deriving (Show)
 
 
-
+-- #########################################################################################
 {-
 Question 2.3.b
   Ask about type of validation requried
   Say we had "2,1,+,+,+,+" This would cause error... maybe that the solution.
-
-
   WE CAN USE THE READS FUCNTION TO SEPERATE OUT A GIVEN VALUES. SO SAY  reads "34aaaa" :: [(Integer,String)]
 
 -}
@@ -137,6 +140,10 @@ step3 array word
       --of the function, otherwise an Nothing is returned.
       |  not $ null (reads word :: [(Integer,String)])= Just (array ++ [(read word::Int)])
       |  otherwise = Nothing
+
+
+-- #########################################################################################
+
 {-
 Question 2.3.c
   Regarding rpn3
@@ -148,17 +155,21 @@ rpn3 userInput
   where
     answer = (foldl sorter [] userInput)
     sorter numbers testingVal
-      -- | length [action | action <-numbers, not( action `elem` ["+","-","*"])] /= length numbers = testingVal:numbers
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
 
 
-
+-- #########################################################################################
 {-
   Question 2.4.a
-   He wants you to implement a function that takes given aprameter, say fib and returns an associatied function, where you would then provide the said funcion with parameters
-   WHich then gets evalated and returned to the said result.
--- -}
+  The below function works by passing values into the function decider, which
+  determins which type of operation should take place, if the operation is defined
+  in the function being passed in then the appropriate method is applied to said
+  values. if however the wrong values are passed in, the defaults to the oringinal
+  operations which perform "+", "-" and "*".
+  Therefore this implemenation allows the opeator function to overide the default
+  functions "+", "-" and "*", provided it is defined in the function being passed in.
+ -}
 rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> [Int]
 rpn4 func userInput = (foldl (functionDecider func) [] userInput)
   where
@@ -167,9 +178,15 @@ rpn4 func userInput = (foldl (functionDecider func) [] userInput)
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
 
+-- #########################################################################################
 
 {-
   Question 2.4.b, extensions to Q2.4.a
+  The following method functions by passing in a string, and depending on the
+  value of said string, the associatied function is called, where each function
+  can then be applied partially in the rpn4 function. Each appropirate method
+  has appropraite function, and method for parsing, this being needed as to ensure
+  the returning function is of a partial type.
   P.s method was implmented without using guards to make it easy to read function
 -}
 

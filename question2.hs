@@ -1,5 +1,6 @@
 import           Data.List
 import           System.IO
+import           Data.Maybe
 {-
 Question 2.1.a
   This question uses appropraite pattern matching to solve pass in values into
@@ -140,14 +141,47 @@ step3 array word
 Question 2.3.c
   Regarding rpn3
 -}
--- rpn3 :: [String] -> RPNOut
--- rpn3 userInput
---     | 3 `elem` answer = Stuck [23,4,5] ["+"]
---     | length answer <=1 = Success (head answer)
---     | otherwise = Incomplete answer
---   where
---     answer = (foldl sorter [] userInput)
---     sorter numbers testingVal
---       | length [action | action <-numbers, not( action `elem` ["+","-","*"])] /= length numbers = testingVal:numbers
---       | testingVal `elem` ["+","-","*"] = step numbers testingVal
---       | otherwise = read testingVal:numbers
+rpn3 :: [String] -> RPNOut
+rpn3 userInput
+    | length answer <=1 = Success (head answer)
+    | otherwise = Incomplete answer
+  where
+    answer = (foldl sorter [] userInput)
+    sorter numbers testingVal
+      -- | length [action | action <-numbers, not( action `elem` ["+","-","*"])] /= length numbers = testingVal:numbers
+      | testingVal `elem` ["+","-","*"] = step numbers testingVal
+      | otherwise = read testingVal:numbers
+
+
+
+{-
+  Question 2.4.a
+   He wants you to implement a function that takes given aprameter, say fib and returns an associatied function, where you would then provide the said funcion with parameters
+   WHich then gets evalated and returned to the said result.
+-- -}
+rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> Int
+rpn4 func userInput = head (foldl (functionDecider func) [] userInput)
+  where
+    functionDecider _ numbers testingVal = originalOperations numbers testingVal -- Think of putting this as gurads instead of pattern matching
+    originalOperations numbers testingVal
+      | testingVal `elem` ["+","-","*"] = step numbers testingVal
+      | otherwise = read testingVal:numbers
+
+
+{-
+  Question 2.4.b, extensions to Q2.4.a
+-}
+
+exts :: String -> Maybe ([Integer] -> [Integer])
+exts "+" = Just (map (+2))
+exts _  = Nothing
+
+
+--
+--
+-- rpn4 func userInput = head . (foldl sorter [] userInput) --THIS SHOULD BE WORKING!!1 TRY RESTRUCUTRE WITH ORIGINAL RPN function
+--                         where
+--                           sorter numbers testingVal
+--                             -- | (func numbers) == Nothing = (func numbers)
+--                             | testingVal `elem` ["+","-","*"] = step numbers testingVal
+--                             | otherwise = read testingVal:numbers

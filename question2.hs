@@ -94,4 +94,12 @@ pn = head . foldr sorter []
       | testVal == "-" = customNegativeStep numbers testVal
       | testVal `elem` ["+","*"] = step numbers testVal
       | otherwise = read testVal:numbers
-    customNegativeStep (x:y:ys) "-" = x - y:ys --Need due to explanation above
+    customNegativeStep (x:y:ys) "-" = x - y:ys --Needed due to explanation above
+
+
+
+{-
+Question 2.3.a
+
+-}
+Sucess :: Int -> RPNOut

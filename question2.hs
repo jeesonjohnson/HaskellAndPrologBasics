@@ -173,7 +173,9 @@ rpn3 userInput
 rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> [Int]
 rpn4 func userInput = (foldl (functionDecider func) [] userInput)
   where
-    functionDecider func numbers testingVal = if (not (isNothing (func testingVal))) then (fromJust (func testingVal )) numbers else originalOperations numbers testingVal
+    functionDecider func numbers testingVal =
+      if (not (isNothing (func testingVal))) then (fromJust (func testingVal )) numbers
+      else originalOperations numbers testingVal
     originalOperations numbers testingVal
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers

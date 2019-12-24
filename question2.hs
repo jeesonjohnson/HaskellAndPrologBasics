@@ -159,11 +159,10 @@ rpn3 userInput
    He wants you to implement a function that takes given aprameter, say fib and returns an associatied function, where you would then provide the said funcion with parameters
    WHich then gets evalated and returned to the said result.
 -- -}
-rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> Int
-rpn4 func userInput = head (foldl (functionDecider func) [] userInput)
+rpn4 :: (String -> Maybe ([Int] -> [Int])) -> [String] -> [Int]
+rpn4 func userInput = (foldl (functionDecider func) [] userInput)
   where
     functionDecider func numbers testingVal = if (not (isNothing (func testingVal))) then (fromJust (func testingVal )) numbers else originalOperations numbers testingVal
-    -- functionDecider _ numbers testingVal = originalOperations numbers testingVal
     originalOperations numbers testingVal
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
@@ -171,18 +170,27 @@ rpn4 func userInput = head (foldl (functionDecider func) [] userInput)
 
 {-
   Question 2.4.b, extensions to Q2.4.a
+  P.s method was implmented without using guards to make it easy to read function
 -}
 
 exts :: String -> Maybe ([Int] -> [Int])
-exts "+" = Just (map (+2))
-exts _  = Nothing
-
-
---
---
--- rpn4 func userInput = head . (foldl sorter [] userInput) --THIS SHOULD BE WORKING!!1 TRY RESTRUCUTRE WITH ORIGINAL RPN function
---                         where
---                           sorter numbers testingVal
---                             -- | (func numbers) == Nothing = (func numbers)
---                             | testingVal `elem` ["+","-","*"] = step numbers testingVal
---                             | otherwise = read testingVal:numbers
+exts "fib" = Just fib
+  where
+    --Defining the fib function handler
+   fib (x:xs) = (fibCalc x):xs
+   --Defining method to calcuate actual fib values
+   fibCalc 0 = 0
+   fibCalc 1 = 1
+   fibCalc n = fibCalc (n-1) + fibCalc(n-2)
+exts "!" = Just factorial
+  where
+   --Defining function for factorial
+   factorial (x:xs) = (factorialCalc x):xs
+   --Defining actual factorial function
+   factorialCalc 0 = 1
+   factorialCalc n = n * factorialCalc (n-1)
+exts "sum" = Just customSum
+  where customSum x = [(foldl (+) 0 x)]
+exts "prod" = Just customProd
+  where customProd x = [(foldl (*) 1 x)]
+exts _ = Nothing

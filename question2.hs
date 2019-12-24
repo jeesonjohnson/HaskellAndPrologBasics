@@ -2,6 +2,8 @@ import           Data.List
 import           System.IO
 {-
 Question 2.1.a
+  This question uses appropraite pattern matching to solve pass in values into
+  the function and evaluate the said results.
 -}
 --Step function definition
 step :: [Int]-> String->[Int]--Rememebre to achnagain valurable names!!!!!!
@@ -9,9 +11,7 @@ step (x:y:ys) "*" = x * y:ys
 step (x:y:ys) "+" = x + y:ys
 step (x:y:ys) "-" = y - x:ys
 --Validations for step function
-step (x:ys) _     = x:ys
-step _ word=      [read word::Int]
-
+step arr word = arr ++ [read word::Int]
 {-
 Question 2.1.b
 
@@ -52,7 +52,10 @@ calcRPN = head . foldl sorter []
 
 
 {-
-Question 2.1.c ##PRBABLY NEED TO CFHANGE THIS!!! SINCE ITS KIND DOING TI IN A CHEAT WAY....
+Question 2.1.c
+  This function works by implementing a foldl function within the defintion of
+  the definition of the overall function through recurrsion, to solve the said
+  problem.
 
 -}
 
@@ -100,6 +103,51 @@ pn = head . foldr sorter []
 
 {-
 Question 2.3.a
+  Whereas the similar output could be achived by the following
+  -- data RPNOut = Success Int | Stuck [Int] [String] | Incomplete [Int] deriving (Show)
+  the better implemention was to use haskell's record syntax, which allows the definition of
+  a given return statment, along with appropraite methods to extract specific data
+  from each assosication process outcome if needed. Say by doing "answer Success 10" we
+  would be able to extract the speifc value of answer, rather than a general show statment
+-}
+data RPNOut = Success { answer :: Int}| Stuck {inputNumbers::[Int], currentOperation :: [String]} |
+              Incomplete {finalNumberArray :: [Int]} deriving (Show)
+
+
+
+{-
+Question 2.3.b
+  Ask about type of validation requried
+  Say we had "2,1,+,+,+,+" This would cause error... maybe that the solution.
+
+
+  WE CAN USE THE READS FUCNTION TO SEPERATE OUT A GIVEN VALUES. SO SAY  reads "34aaaa" :: [(Integer,String)]
 
 -}
-Sucess :: Int -> RPNOut
+
+step3 :: [Int] -> String -> Maybe [Int]
+-- --Actual operations
+step3 (x:y:ys) "*" = if ( (x*y /= (maxBound ::Int )) || (x*y /=(negate (maxBound ::Int ))) ) then Just (x * y:ys) else Nothing
+step3 (x:y:ys) "+" = if ( (x+y /= (maxBound ::Int )) || (x+y /=(negate (maxBound ::Int ))) ) then Just (x + y:ys) else Nothing
+step3 (x:y:ys) "-" = if ( (y-x /= (maxBound ::Int )) || (y-x /=(negate (maxBound ::Int ))) ) then Just (y-x:ys) else Nothing
+--Validations for step function
+step3 array word
+      --The below validation ensures that only numbers or operations are passed into the string condition
+      --of the function, otherwise an Nothing is returned.
+      |  not $ null (reads word :: [(Integer,String)])= Just (array ++ [(read word::Int)])
+      |  otherwise = Nothing
+{-
+Question 2.3.c
+  Regarding rpn3
+-}
+-- rpn3 :: [String] -> RPNOut
+-- rpn3 userInput
+--     | 3 `elem` answer = Stuck [23,4,5] ["+"]
+--     | length answer <=1 = Success (head answer)
+--     | otherwise = Incomplete answer
+--   where
+--     answer = (foldl sorter [] userInput)
+--     sorter numbers testingVal
+--       | length [action | action <-numbers, not( action `elem` ["+","-","*"])] /= length numbers = testingVal:numbers
+--       | testingVal `elem` ["+","-","*"] = step numbers testingVal
+--       | otherwise = read testingVal:numbers

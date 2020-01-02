@@ -53,12 +53,15 @@ distance(c5,c4,8).
 %                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
 
-% paths(Start,Start,_,[Start]):-distance(Start,_,_). % Prevent Cycles
 paths(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
 paths(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
                                     \+member(SecondStep,[GenHead|GenTail]),
                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
+
+find_paths(Start,End,Answer):- paths(Start,End,[Start],GenAnswer),
+                               reverse(GenAnswer,ReversedAnswer),
+                               Answer = ReversedAnswer.
 
 %
 % % Currently Working solution, no bidirection.

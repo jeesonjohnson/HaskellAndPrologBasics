@@ -1,12 +1,4 @@
 % Distance represents the raw distance, in a bi nature fastion of the given nodes
-node(c1).
-node(c2).
-node(c3).
-node(c4).
-node(c5).
-node(c6).
-
-
 % The distances of all nodes respective to c1.
 distance(c1,c2,4).
 distance(c2,c1,4).
@@ -29,28 +21,6 @@ distance(c5,c3,2).
 % Distances of all nodes respective to c4
 distance(c4,c5,8).
 distance(c5,c4,8).
-%
-% all_paths(_,End,[End|_]).
-% all_paths(Start,End,Generated):-distances(Start,SecondPoint,_),
-%                                 \+(member(SecondPoint,Generated)),
-%                                 append(SecondPoint,Generated),
-%                                 all_paths(SecondPoint,End,Generated).
-
-% routing(FromCity,FromCity,[FromCity]).
-%
-% routing(FromCity, ToCity, [FromCity,ToCity]) :-
-%   distance(FromCity, ToCity,_).
-%
-% routing(FromCity, ToCity, [FromCity|Connections]) :-
-%   distance(FromCity, ToConnection,_),
-%   routing(ToConnection, ToCity, Connections).
-
-
-% paths(Start,Start,_,[Start]):-distance(Start,_,_). % Prevent Cycles
-% paths(_,End,[End|GenTail],[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
-% paths(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
-%                                     \+member(SecondStep,[GenHead|GenTail]),
-%                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
 % Question 3.2.c Solution!
 path(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
@@ -82,23 +52,8 @@ combined_path_sorter(Start,End):-combine_paths(Start,End,Generated),
                             sort(Generated,SortedSolution),
                             head(SortedSolution,FirstElement),
                             head(FirstElement,Length,Route),
-                            write("The route: " + Route + " is shortest with length:" +Length).
+                            writef(' The route: %d is shortest with with length: %d', [Route,Length]).
 
-% sorter([(Head,Tail)|OverallTail],Ans):-sort([(Head,Tail)|OverallTail],Ans).
-
-
-
-% Workign!
-% combine_paths(Start,End,Generated,Temp):-findall([Length],find_paths_length(Start,End,Answer,Length),Generated).
-
-
-% find_smallest(Start,End,CombinedLengths):-find_paths_length(Start,End,Answer,Length),
-
-% test([(Head,Tail)|OverallTail],Ans):-sort([(Head,Tail)|OverallTail],Ans).
-
-
-% test(Num1,Array):-
-%
 % % Currently Working solution, no bidirection.
 % oh(1, 2, 1).
 % oh(2, 6, 3).

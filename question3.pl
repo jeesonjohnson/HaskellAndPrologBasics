@@ -5,8 +5,9 @@
 % Question 3.1.a
 %  Defining translation facts.
 %##########################################################################################
-
-english_french(mad,fou).%My name is Jeeson and i love computers. I also love a good chocolate cheescake.
+%"My name is Jeeson and i love computers. i also love a good chocolate cheescake.""
+%The above phrase should be completly convertable
+english_french(mad,fou).
 english_french(my,ma).
 english_french(name,nom).
 english_french(is,est).
@@ -68,10 +69,11 @@ distance(c5,c4,8).
 %##########################################################################################
 % Question 3.2.b
 %##########################################################################################
-% The bidirectional nature of the graph was fixed, by implmenting a reverse perdicate, that represents the opposite direction.
-% For example to make c1 to c2 bidirectional, we first define distance(c1,c2,4) and then distance(c2,c1,4).
-% But to ensure the below predicates do not become stuck in a loop, we need to ensrue that a previously
-% visted node is not met again by the alargorithm.
+% The bidirectional nature of the graph was fixed, by implmenting a reverse perdicate, that
+% represents the opposite direction.
+% For example to make c1 to c2 bidirectional, we first define distance(c1,c2,4) and then
+% distance(c2,c1,4). But to ensure the below predicates do not become stuck in a loop, we
+% need to ensrue that a previously visted node is not met again by the alargorithm.
 
 
 

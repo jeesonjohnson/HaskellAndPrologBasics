@@ -52,14 +52,26 @@ distance(c5,c4,8).
 %                                     \+member(SecondStep,[GenHead|GenTail]),
 %                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
-
-paths(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
-paths(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
+% Question 3.2.c Solution!
+path(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
+path(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
                                     \+member(SecondStep,[GenHead|GenTail]),
-                                    paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
+                                    path(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
 
-find_paths(Start,End,Answer):- paths(Start,End,[Start],GenAnswer),
+find_paths(Start,End,Answer):- path(Start,End,[Start],GenAnswer),
+                               reverse(GenAnswer,ReversedAnswer),
+                               Answer = ReversedAnswer.
+
+% Question 3.2.b Solution!
+path_gen(Start,End,[End|GenTail],[End|GenTail],Length,Length):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
+path_gen(Start,End,[GenHead|GenTail],Answer,OrignalLength,Length):-distance(Start,SecondStep,GeneratedDistance),
+                                    \+member(SecondStep,[GenHead|GenTail]),
+                                    TotalDistance is OrignalLength+GeneratedDistance,
+                                    path_gen(SecondStep,End,[SecondStep,GenHead|GenTail],Answer,TotalDistance,Length).
+
+
+find_paths_length(Start,End,Answer,Length):- path_gen(Start,End,[Start],GenAnswer,0,Length),
                                reverse(GenAnswer,ReversedAnswer),
                                Answer = ReversedAnswer.
 

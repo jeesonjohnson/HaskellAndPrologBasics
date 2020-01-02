@@ -1,4 +1,12 @@
 % Distance represents the raw distance, in a bi nature fastion of the given nodes
+node(c1).
+node(c2).
+node(c3).
+node(c4).
+node(c5).
+node(c6).
+
+
 % The distances of all nodes respective to c1.
 distance(c1,c2,4).
 distance(c2,c1,4).
@@ -45,9 +53,10 @@ distance(c5,c4,8).
 %                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
 
-path(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
-path(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
-                                    \+member(SecondStep,[GenHead|GenTail]), %This check ensures there are no loops within generated as a reuslt of bidrection, or recurison. 
+% paths(Start,Start,_,[Start]):-distance(Start,_,_). % Prevent Cycles
+paths(Start,End,[End|GenTail],[End|GenTail]):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
+paths(Start,End,[GenHead|GenTail],Answer):-distance(Start,SecondStep,_),
+                                    \+member(SecondStep,[GenHead|GenTail]),
                                     paths(SecondStep,End,[SecondStep,GenHead|GenTail],Answer).
 
 

@@ -5,6 +5,7 @@
 % Question 3.1.a
 %  Defining translation facts.
 %##########################################################################################
+
 english_french(mad,fou).%My name is Jeeson and i love computers. I also love a good chocolate cheescake.
 english_french(my,ma).
 english_french(name,nom).
@@ -16,19 +17,21 @@ english_french(computers,ordinateurs).
 english_french(also,aussi).
 english_french(good,bein).
 english_french(chocolate,chocolat).
+english_french(Undefined,Undefined).
 %##########################################################################################
 % Question 3.1.b
 %  Method for translate between french and english
 %##########################################################################################
-
-translate_eng([],[]).
-translate_eng([WordHead|WordTail],Answer).
-
-
-
+trans([],Answer,Answer).
+trans([WordHead|WordTail],[Main|MainTail],Answer):-
+                                   english_french(WordHead,FrenchWord),
+                                   trans(WordTail,[FrenchWord,Main|MainTail],Answer).
 
 
-
+translate_eng([TransHead|TransTail],[Translated]):-english_french(TransHead,FirstFrenchWord),
+                                                 trans(TransTail,[FirstFrenchWord],TransaltedArray),
+                                                 reverse(TransaltedArray,ReversedArr),
+                                                 atomic_list_concat(ReversedArr," ",Translated).
 
 %-----------------------------------------------------------------------------------------
 % Question 3.2
@@ -124,6 +127,54 @@ shortest_path(Start,End):-
         head(SortedSolution,FirstElement),
         head(FirstElement,Length,Route),
         writef(' The route: %d is shortest with with length: %d', [Route,Length]).
+
+
+%-----------------------------------------------------------------------------------------
+% Question 3.3
+%-----------------------------------------------------------------------------------------
+%##########################################################################################
+% Question 3.3.a
+%##########################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%##########################################################################################
+% Question 3.2.d
+%##########################################################################################
 
 % % Currently Working solution, no bidirection.
 % oh(1, 2, 1).

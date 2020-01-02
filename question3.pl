@@ -64,7 +64,10 @@ find_paths(Start,End,Answer):- path(Start,End,[Start],GenAnswer),
                                Answer = ReversedAnswer.
 
 % Question 3.2.b Solution!
-path_gen(Start,End,[End|GenTail],[End|GenTail],Length,Length):-member(Start,[End|GenTail]). %Check that the last element in list, is the final answer we were looking for.
+head([H|_], H). %Finds the top element of a list.
+head((Length,Route),Length,Route).
+
+path_gen(Start,End,[End|GenTail],[End|GenTail],Length,Length):-member(Start,[End|GenTail]).
 path_gen(Start,End,[GenHead|GenTail],Answer,OrignalLength,Length):-distance(Start,SecondStep,GeneratedDistance),
                                     \+member(SecondStep,[GenHead|GenTail]),
                                     TotalDistance is OrignalLength+GeneratedDistance,
@@ -74,7 +77,27 @@ path_gen(Start,End,[GenHead|GenTail],Answer,OrignalLength,Length):-distance(Star
 find_paths_length(Start,End,Answer,Length):- path_gen(Start,End,[Start],GenAnswer,0,Length),
                                reverse(GenAnswer,ReversedAnswer),
                                Answer = ReversedAnswer.
+combine_paths(Start,End,Generated):-findall((Length,Answer),find_paths_length(Start,End,Answer,Length),Generated).
+combined_path_sorter(Start,End):-combine_paths(Start,End,Generated),
+                            sort(Generated,SortedSolution),
+                            head(SortedSolution,FirstElement),
+                            head(FirstElement,Length,Route),
+                            write("The route: " + Route + " is shortest with length:" +Length).
 
+% sorter([(Head,Tail)|OverallTail],Ans):-sort([(Head,Tail)|OverallTail],Ans).
+
+
+
+% Workign!
+% combine_paths(Start,End,Generated,Temp):-findall([Length],find_paths_length(Start,End,Answer,Length),Generated).
+
+
+% find_smallest(Start,End,CombinedLengths):-find_paths_length(Start,End,Answer,Length),
+
+% test([(Head,Tail)|OverallTail],Ans):-sort([(Head,Tail)|OverallTail],Ans).
+
+
+% test(Num1,Array):-
 %
 % % Currently Working solution, no bidirection.
 % oh(1, 2, 1).

@@ -39,17 +39,17 @@ int main() {
 	cout << "This is what the integer array looks like currently:" << endl;
 	integerArray.print();
 	//////////////////////////////////////////////////////////////////////
-
+	cout<< "Okay cool so thats the integer array. Now lets look at the array of doubles" << endl << endl;
 	//Q1.3.c
 	DynamicArray<double> doubleArray(5);
 	for (int x = 0; x < 5; x++) {
 		doubleArray.addStart((double) rand() / RAND_MAX);
 	}
-	cout << "This is what the integer array looks like currently:" << endl;
+	cout << "This is what the array of doubles looks like currently:" << endl;
 	doubleArray.print();
 
 	//Q1.3.d
-	cout << "Enter 5 numbers one after the other make sure its an integer"
+	cout << "Enter 5 numbers one after the other make sure its an double"
 			<< endl;
 	counter = 0;
 	while (counter < 5) {
@@ -57,13 +57,16 @@ int main() {
 		try {
 			cin >> tempDouble;
 			doubleArray.addStart(tempDouble);
-			cout << "Added " << tempDouble << " to integerArray" << endl;
+			cout << "Added " << tempDouble << " to doubleArray" << endl;
 			counter++;
 		} catch (...) {
-			cout << "Make sure you enter an integer!";
+			cout << "Make sure you enter an double!";
 		};
 	}
-	cout << "This is what the integer array looks like currently:" << endl;
+	cout << "SO after adding those values the double array looks like :" << endl;
+	doubleArray.print();
+
+	cout<< "Okay now to the final part of the program" << endl ;
 	//////////////////////////////////////////////////////////////////////
 	//Q1.3.e
 	cout << endl

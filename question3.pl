@@ -137,11 +137,29 @@ shortest_path(Start,End):-
 %##########################################################################################
 % Question 3.3.a
 %##########################################################################################
+% Defining nationality by house colour.
+nationality_house(french,black).
+nationality_house(japanese,blue).
+nationality_house(spanish,brown).
+
+% Defining pets by nationality
+nationality_pet(french,snail).
+% nationality_pet(japanese,UNKNOWN). This fact is not known. AS WE CANT MAKE ASSUMPTION ABOUT PET OF japanese HOUSE/
+nationality_pet(spanish,jaguar).
+
+% defining house location, with respect ot LEFT OF.
+left_house(japanese,french).
+left_house(spanish,japanese).
+% defining house location, with respect ot RIGHT OF.
+left_house(french,japanese).
+left_house(japanese,spanish).
 
 
+%##########################################################################################
+% Question 3.3.b
+%##########################################################################################
 
-
-
+nationality_of_pet_owner(Pet,Nationality):-nationality_pet(Nationality,Pet).
 
 
 

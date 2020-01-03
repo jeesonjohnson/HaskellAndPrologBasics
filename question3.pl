@@ -32,7 +32,7 @@ trans([WordHead|WordTail],[Main|MainTail],Answer):-
 translate_eng([TransHead|TransTail],[Translated]):-english_french(TransHead,FirstFrenchWord),
                                                  trans(TransTail,[FirstFrenchWord],TransaltedArray),
                                                  reverse(TransaltedArray,ReversedArr),
-                                                 atomic_list_concat(ReversedArr," ",Translated).
+                                                 atomic_list_concat(ReversedArr,' ',Translated).
 
 %-----------------------------------------------------------------------------------------
 % Question 3.2
@@ -158,7 +158,7 @@ left_house(japanese,spanish).
 %##########################################################################################
 % Question 3.3.b
 %##########################################################################################
-
+% NOT SURE IF THIS SIMPLE PREDICATE IS ENOUGH FOR 4 MARKS, BUT THIS SOLVES THE QUESTION?
 nationality_of_pet_owner(Pet,Nationality):-nationality_pet(Nationality,Pet).
 
 

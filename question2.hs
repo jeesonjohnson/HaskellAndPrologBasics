@@ -123,9 +123,7 @@ data RPNOut = Success { answer :: Int}| Stuck {inputNumbers::[Int], currentOpera
 -- #########################################################################################
 {-
 Question 2.3.b
-  Ask about type of validation requried
-  Say we had "2,1,+,+,+,+" This would cause error... maybe that the solution.
-  WE CAN USE THE READS FUCNTION TO SEPERATE OUT A GIVEN VALUES. SO SAY  reads "34aaaa" :: [(Integer,String)]
+  Ask about type of validation requried\
 
 -}
 

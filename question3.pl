@@ -160,3 +160,42 @@ left_house(japanese,spanish).
 %##########################################################################################
 % NOT SURE IF THIS SIMPLE PREDICATE IS ENOUGH FOR 4 MARKS, BUT THIS SOLVES THE QUESTION?
 nationality_of_pet_owner(Pet,Nationality):-nationality_pet(Nationality,Pet).
+rabbits(X):-nationality_of_pet(rabbits,X).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% https://stackoverflow.com/questions/4716245/solving-logic-puzzle-in-prolog
+neigh(Left, Right, List) :-
+        List = [Left | [Right | _]];
+        List = [_ | [Left | [Right]]].
+
+zebraowner(Houses, ZebraOwner):-
+        member([englishman, _, red], Houses),
+        member([spanish, jaguar, _], Houses),
+        neigh([_, snail, _], [japanese, _, _], Houses),
+        neigh([_, snail, _], [_, _, blue], Houses),
+        member([ZebraOwner, zebra, _], Houses),
+        member([_, _, green], Houses).
+
+
+zebra(X) :- zebraowner([_, _, _], X).

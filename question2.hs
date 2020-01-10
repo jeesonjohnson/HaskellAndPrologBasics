@@ -43,6 +43,7 @@ we pass in head . foldl (sorter) [] ["3","7","+"]
                            fucntion on the array that returns the first element of the array.
 -}
 
+
 calcRPN :: [String] -> Int
 calcRPN = head . foldl sorter []
   where
@@ -119,16 +120,26 @@ Question 2.3.a
 data RPNOut = Success { answer :: Int}| Stuck {inputNumbers::[Int], currentOperation :: [String]} |
               Incomplete {finalNumberArray :: [Int]} deriving (Show)
 
-
 -- #########################################################################################
 {-
 Question 2.3.b
-  Ask about type of validation requried\
-
+  This operation ensures that the the validation of inputs, and the possability of said
+  operations, and if an operation is not possible, an error is thrown. For example the
+  validations are such that:
+    1)Ensure that the number of elements to perform an operation is greater than or equal to 2.
+      This being as at a minimum the operation must have 2 numbers to operate on, so e.g [2] "+" is
+      not possible, since you need 2 numbers to compelte an addition.
+    2)Validation is done to ensure that the MaxSize of an Integer is NOT reached by any of the operations,
+      if reached Nothing is returned.
+    3)Validation is provided on the type of values passed into the array, as such an operation could only
+      be done on integers, adn with the predefined operation set of "+","-" and "*".
 -}
 
 step3 :: [Int] -> String -> Maybe [Int]
--- --Actual operations
+step3 array word
+  | length(array) <2 = Nothing -- Validation for when an operation is not possible, for instance, if [1] "+" that operation
+                               -- cannot be completed, as a operation must have 2 numeric arguments.
+-- --Actual operation
 step3 (x:y:ys) "*" = if ( (x*y /= (maxBound ::Int )) || (x*y /=(negate (maxBound ::Int ))) ) then Just (x * y:ys) else Nothing
 step3 (x:y:ys) "+" = if ( (x+y /= (maxBound ::Int )) || (x+y /=(negate (maxBound ::Int ))) ) then Just (x + y:ys) else Nothing
 step3 (x:y:ys) "-" = if ( (y-x /= (maxBound ::Int )) || (y-x /=(negate (maxBound ::Int ))) ) then Just (y-x:ys) else Nothing
@@ -145,16 +156,42 @@ step3 array word
 {-
 Question 2.3.c
   Regarding rpn3
+  This function is ordered on the basis of where errors may ocur within the function.
+  This builds upon the idea of having a custom implementation of the foldl function
+  using recurrsion, that breaks out if an input data is incorrect. This implementation
+  depends on the sorter function to actuall call the step function and carry out the
+  operation as expplained in previous questions.
+
+  Firstly the guards check if the length of array of to be done operations are empty,
+  and if the there are more than 1 value in list of parsed numbers, then the operation
+  is stuck. Since 2 numbers must have an operation to reduce further down into an integer.
+
+  Secondly the guards check if the there are no remaining operations, and thus due to
+  the order of operations(first checking Incomplete results), we can be sure the result
+  is final, and the result cant be further reduced.
+
+  Thirdly, we arrive at a stuck situation when there are less than 1 numbers in the array
+  of numbers, and we try and conduct an operation on that singular number,  this would
+  arrive at a failure since at a minium you need 2 numbers to complete an operation in
+  our domain.
+
+  Finally the guard calls a reursive step to the function, further reducing the operations
+  that remain.
+
+
+
 -}
 rpn3 :: [String] -> RPNOut
-rpn3 userInput
-    | length answer <=1 = Success (head answer)
-    | otherwise = Incomplete answer
+rpn3 userInput = customfolder sorter [] userInput
   where
-    answer = (foldl sorter [] userInput)
     sorter numbers testingVal
       | testingVal `elem` ["+","-","*"] = step numbers testingVal
       | otherwise = read testingVal:numbers
+    customfolder function numbers arr
+      | length(arr)==0 && length(numbers)>=2 = Incomplete numbers
+      | length(arr)==0 = Success (head numbers)
+      | (length (numbers)<=1) && (head(arr) `elem` ["+","-","*"] ) = Stuck (numbers) [last(arr)]
+      | otherwise = customfolder function (function numbers (head arr)) (tail(arr))
 
 
 -- #########################################################################################

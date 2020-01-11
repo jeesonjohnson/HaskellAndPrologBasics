@@ -163,17 +163,16 @@ nationality_of_pet_owner(Pet,Nationality):-nationality_pet(Nationality,Pet).
 rabbits(X):-nationality_of_pet(rabbits,X).
 
 
-
-
-
-
-
-
-
-
-
-
-
+%-----------------------------------------------------------------------------------------
+% Question 3.3
+%-----------------------------------------------------------------------------------------
+%##########################################################################################
+% Question 3.3.a
+%##########################################################################################
+neighbour(Left,Right,Neigh):-
+  Neigh = [Left, Right ,_].
+neighbour(Left,Right,Neigh):-
+  Neigh = [_, Left, Right].
 
 
 
@@ -185,17 +184,28 @@ rabbits(X):-nationality_of_pet(rabbits,X).
 
 
 % https://stackoverflow.com/questions/4716245/solving-logic-puzzle-in-prolog
+% neigh(Left, Right, List) :-
+%         List = [Left | [Right | _]];
+%         List = [_ | [Left | [Right]]].
+
+
+
+% This function works using haskells ability to fill in unknowns, and thus dreive meaning.
+% It also utilises the feature of the mem
 neigh(Left, Right, List) :-
-        List = [Left | [Right | _]];
-        List = [_ | [Left | [Right]]].
+        List = [Left, Right ,_];
+        List = [_, Left, Right].
 
-zebraowner(Houses, ZebraOwner):-
-        member([englishman, _, red], Houses),
-        member([spanish, jaguar, _], Houses),
-        neigh([_, snail, _], [japanese, _, _], Houses),
-        neigh([_, snail, _], [_, _, blue], Houses),
-        member([ZebraOwner, zebra, _], Houses),
-        member([_, _, green], Houses).
+% house([french,_,black],Houses)
+%The function essentially works by developing the strucutre using haskells unkown function parameter, and building such onto a singular predicate
+
+rabbitowner(Houses, ZebraOwner):-
+        neigh([_, snail, _], [japanese, _, _], Houses), %Here we define the the person on the left of the swnail house is japanese
+        neigh([_, snail, _], [_, _, blue], Houses), %Here we define person to right of snail house has a blue house.
+        member([french, _, black], Houses),% The member function, works as such to add to the varaible houses the condition, [french,_(unknonw),black]
+        member([spanish, jaguar, _], Houses), %In this step we now add another unknwon,
+        member([_, _, brown], Houses), %Not needed but for compelteness
+        member([ZebraOwner, whatwearelookingfor_rabbit, _], Houses). %Here we define the predicate we are searching, i.e the predicate
 
 
-zebra(X) :- zebraowner([_, _, _], X).
+rabbit(X) :- rabbitowner([_, _, _], X).
